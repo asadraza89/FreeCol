@@ -171,6 +171,11 @@ public class ClientOptions extends OptionGroup {
     public static final String CONFIRM_SAVE_OVERWRITE = "model.option.confirmSaveOverwrite";
     
     /**
+    * Whether to display end turn grey background or not.
+    */
+    public static final String DISABLE_GRAY_LAYER = "model.option.disableGrayLayer";
+
+    /**
      * What text to display in the tiles.
      */
     public static final String DISPLAY_TILE_TEXT = "model.option.displayTileText";
@@ -765,6 +770,8 @@ public class ClientOptions extends OptionGroup {
         // @compat 0.10.7
         addBooleanOption(CONFIRM_SAVE_OVERWRITE,
                 "clientOptions.savegames", false);
+        addBooleanOption(DISABLE_GRAY_LAYER,
+                "clientOptions.gui", false);
         // end @compat
     }
 
