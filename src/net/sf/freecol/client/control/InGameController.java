@@ -1093,6 +1093,8 @@ public final class InGameController implements NetworkConstants {
      * @return True if the game was saved.
      */
     public boolean saveGame() {
+        if (!freeColClient.canSaveCurrentGame()) return false;
+        
         Player player = freeColClient.getMyPlayer();
         Game game = freeColClient.getGame();
         if (game == null) return false; // Keyboard handling can race init
@@ -1102,24 +1104,18 @@ public final class InGameController implements NetworkConstants {
             + getSaveGameString(game.getTurn());
         fileName = fileName.replaceAll(" ", "_");
 
-        if (freeColClient.canSaveCurrentGame()) {
-            File file
-                = gui.showSaveDialog(FreeColDirectories.getSaveDirectory(), fileName);
-            if (file != null) {
-                FreeColDirectories.setSaveDirectory(file.getParentFile());
-                return saveGame(file);
-            }
-            
-            if (!file.exists())
-                return saveGame(file);
-            
-            String conformationMessage = "Warning: This file already "
-                    + "esists.\nDo you wish to overwrite it?";
-            
-            if (gui.showConfirmDialog(conformationMessage, "yes", "no"))
-                return saveGame(file);
-            
-            file = gui.showSaveDialog(FreeColDirectories.getSaveDirectory(), fileName);
+        File file = gui.showSaveDialog(FreeColDirectories.getSaveDirectory(),
+                                       fileName);
+        if (file == null) return false;
+        
+        final boolean confirm = freeColClient.getClientOptions()
+            .getBoolean(ClientOptions.CONFIRM_SAVE_OVERWRITE);
+        if (!confirm 
+            || !file.exists()
+            || gui.showConfirmDialog("saveConfirmationDialog.areYouSure.text",
+                                     "yes", "no")) {
+            FreeColDirectories.setSaveDirectory(file.getParentFile());
+            return saveGame(file);
         }
         return false; 
     }

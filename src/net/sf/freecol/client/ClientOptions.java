@@ -166,6 +166,11 @@ public class ClientOptions extends OptionGroup {
     public static final String DISPLAY_BORDERS = "model.option.displayBorders";
 
     /**
+     * Whether to display confirmation for the overwrite of existing save files.
+     */
+    public static final String CONFIRM_SAVE_OVERWRITE = "model.option.confirmSaveOverwrite";
+    
+    /**
      * What text to display in the tiles.
      */
     public static final String DISPLAY_TILE_TEXT = "model.option.displayTileText";
@@ -757,6 +762,10 @@ public class ClientOptions extends OptionGroup {
             "clientOptions.messages", 0);
         addBooleanOption(USE_PIXMAPS,
             "clientOptions.gui", true);
+        // @compat 0.10.7
+        addBooleanOption(CONFIRM_SAVE_OVERWRITE,
+                "clientOptions.savegames", false);
+        // end @compat
     }
 
     private void addBooleanOption(String id, String gr, boolean val) {
